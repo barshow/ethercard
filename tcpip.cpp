@@ -125,7 +125,8 @@ static uint8_t eth_type_is_ip_and_my_ip(uint16_t len) {
            gPB[IP_HEADER_LEN_VER_P] == 0x45 &&
            (memcmp(gPB + IP_DST_P, EtherCard::myip, 4) == 0  //not my IP
             || (memcmp(gPB + IP_DST_P, EtherCard::broadcastip, 4) == 0) //not subnet broadcast
-            || (memcmp(gPB + IP_DST_P, allOnes, 4) == 0)); //not global broadcasts
+            || (memcmp(gPB + IP_DST_P, allOnes, 4) == 0) //not global broadcasts
+            || gPB[IP_PROTO_P]==IP_PROTO_UDP_V); // HACK FOR UDP MULTICAST
     //!@todo Handle multicast
 }
 
