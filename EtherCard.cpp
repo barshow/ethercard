@@ -112,6 +112,44 @@ void Stash::release () {
     }
 }
 
+
+void Stash::putByte (uint8_t c){
+    load(WRITEBUF, last);
+    uint8_t t = bufs[WRITEBUF].tail;
+    bufs[WRITEBUF].bytes[t++] = c;
+    if (t <= 62)
+        bufs[WRITEBUF].tail = t;
+    else {
+        bufs[WRITEBUF].next = allocBlock();
+        last = bufs[WRITEBUF].next;
+        load(WRITEBUF, last);
+        bufs[WRITEBUF].tail = bufs[WRITEBUF].next = 0;
+        ++count;
+    }
+}
+
+uint8_t Stash::getByte (){
+    load(READBUF, curr);
+    if (curr == last && offs >= bufs[READBUF].tail)
+        return 0;
+    uint8_t b = bufs[READBUF].bytes[offs];
+    if (++offs >= 63 && curr != last) {
+        curr = bufs[READBUF].next;
+        offs = 0;
+    }
+    return b;
+}
+
+bool Stash::getAvailable(){
+    load(READBUF, curr);
+    if (curr == last && offs >= bufs[READBUF].tail)
+        return false;
+
+    return true;
+}
+
+
+
 void Stash::put (char c) {
     load(WRITEBUF, last);
     uint8_t t = bufs[WRITEBUF].tail;

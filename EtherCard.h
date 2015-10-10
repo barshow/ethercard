@@ -148,6 +148,12 @@ public:
 
     void put (char c);
     char get ();
+
+
+    void putByte (uint8_t c);
+    uint8_t getByte ();
+    bool getAvailable();
+
     uint16_t size ();
 
     virtual WRITE_RESULT write(uint8_t b) { put(b); WRITE_RETURN }
