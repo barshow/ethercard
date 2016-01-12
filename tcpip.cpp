@@ -197,8 +197,8 @@ static void make_echo_reply_from_request(uint16_t len) {
 }
 
 void EtherCard::makeUdpReply (const char *data,uint8_t datalen,uint16_t port) {
-    if (datalen>220)
-        datalen = 220;
+    // if (datalen>220)
+    //     datalen = 220;
     gPB[IP_TOTLEN_H_P] = (IP_HEADER_LEN+UDP_HEADER_LEN+datalen) >>8;
     gPB[IP_TOTLEN_L_P] = IP_HEADER_LEN+UDP_HEADER_LEN+datalen;
     make_eth_ip();
@@ -404,8 +404,8 @@ void EtherCard::udpTransmit (uint16_t datalen) {
 void EtherCard::sendUdp (const char *data, uint8_t datalen, uint16_t sport,
                          const uint8_t *dip, uint16_t dport) {
     udpPrepare(sport, dip, dport);
-    if (datalen>220)
-        datalen = 220;
+    // if (datalen>220)
+    //     datalen = 220;
     memcpy(gPB + UDP_DATA_P, data, datalen);
     udpTransmit(datalen);
 }
