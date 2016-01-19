@@ -59,6 +59,7 @@ static uint16_t info_data_len; // Length of TCP/IP payload
 static uint8_t seqnum = 0xa; // My initial tcp sequence number
 static uint8_t result_fd = 123; // Session id of last reply
 static const char* result_ptr; // Pointer to TCP/IP data
+static uint16_t result_len = 0;
 static unsigned long SEQ; // TCP/IP sequence number
 
 #define CLIENTMSS 550
@@ -611,6 +612,7 @@ static uint8_t tcp_result_cb(uint8_t fd, uint8_t status, uint16_t datapos, uint1
     if (status == 0) {
         result_fd = fd; // a valid result has been received, remember its session id
         result_ptr = (char*) ether.buffer + datapos;
+        result_len = datalen;
         // result_ptr[datalen] = 0;
     }
     return 1;
@@ -625,6 +627,14 @@ const char* EtherCard::tcpReply (uint8_t fd) {
     if (result_fd != fd)
         return 0;
     result_fd = 123; // set to a bogus value to prevent future match
+    return result_ptr;
+}
+
+const char* EtherCard::tcpReply (uint8_t fd, uint16_t * dataLengh) {
+    if (result_fd != fd)
+        return 0;
+    result_fd = 123; // set to a bogus value to prevent future match
+    *dataLengh = result_len;
     return result_ptr;
 }
 

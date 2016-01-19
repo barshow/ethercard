@@ -482,6 +482,7 @@ public:
     *     @return <i>char*</i> Pointer to TCP reply payload. NULL if no data.
     */
     static const char* tcpReply (uint8_t fd);
+    static const char* tcpReply (uint8_t fd, uint16_t * dataLengh);
 
     /**   @brief  Configure TCP connections to be persistent or not
     *     @param  persist True to maintain TCP connection. False to finish TCP connection after first packet.
